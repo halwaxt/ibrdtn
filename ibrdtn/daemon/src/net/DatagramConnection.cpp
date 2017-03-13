@@ -36,6 +36,8 @@
 
 // HAL: changed from 0.875
 #define AVG_RTT_WEIGHT 0.725
+#define ACK_TIMEDOUT_WEIGHT 6
+#define ACK_WAITING_WEIGHT 3
 
 namespace dtn
 {
@@ -312,7 +314,7 @@ namespace dtn
 
 					// set timeout to twice the average round-trip-time
 					struct timespec ts;
-					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * 2) + 1, &ts);
+					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * ACK_WAITING_WEIGHT) + 1, &ts);					
 
 					try {
 						ibrcommon::MutexLock l(_ack_cond);
@@ -342,7 +344,7 @@ namespace dtn
 							IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 20) << "ack timeout for seqno " << seqno << IBRCOMMON_LOGGER_ENDL;
 
 							// fail -> increment the future timeout
-							adjust_rtt(static_cast<double>(_avg_rtt) * 2);
+							adjust_rtt(static_cast<double>(_avg_rtt) * ACK_TIMEDOUT_WEIGHT);
 
 							// retransmit the frame
 							continue;
@@ -374,7 +376,7 @@ namespace dtn
 					struct timespec ts;
 
 					// set timeout to twice the average round-trip-time
-					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * 2) + 1, &ts);
+					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * ACK_WAITING_WEIGHT) + 1, &ts);
 
 					// wait until window has at least one free slot
 					while (sw_frames_full()) _ack_cond.wait(&ts);
@@ -402,7 +404,7 @@ namespace dtn
 					_send_state = SEND_WAIT_ACK;
 
 					// set timeout to twice the average round-trip-time
-					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * 2) + 1, &ts);
+					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * ACK_TIMEDOUT_WEIGHT) + 1, &ts);
 
 					// wait until one more slot is available
 					// or no more frames are to ACK (if this was the last frame)
@@ -463,7 +465,7 @@ namespace dtn
 					ibrcommon::MutexLock l(_ack_cond);
 
 					// fail -> increment the future timeout
-					adjust_rtt(static_cast<double>(_avg_rtt) * 2);
+					adjust_rtt(static_cast<double>(_avg_rtt) * ACK_TIMEDOUT_WEIGHT);
 
 					if (_sw_frames.size() > 0)
 					{
@@ -499,7 +501,7 @@ namespace dtn
 					_send_state = SEND_WAIT_ACK;
 
 					// set timeout to twice the average round-trip-time
-					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * 2) + 1, &ts);
+					ibrcommon::Conditional::gettimeout(static_cast<size_t>(_avg_rtt * ACK_WAITING_WEIGHT) + 1, &ts);
 
 					// wait until one more slot is available
 					// or no more frames are to ACK (if this was the last frame)
