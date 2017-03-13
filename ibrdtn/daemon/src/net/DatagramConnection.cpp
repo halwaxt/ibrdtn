@@ -578,15 +578,18 @@ namespace dtn
 
 		void DatagramConnection::adjust_rtt(double value)
 		{
+			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 40) << "Adjusting current average RTT : " << std::setprecision(4) << _avg_rtt << " with measured value: " << std::setprecision(4) << value << IBRCOMMON_LOGGER_ENDL;
 			// convert current avg to float
-			double new_rtt = _avg_rtt;
+			
+			double weighted_rtt = (_avg_rtt * AVG_RTT_WEIGHT);
+			double weighted_measure = ((1 - AVG_RTT_WEIGHT) * value);
+			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 40) << "Adjustment calculation weighted current: " << std::setprecision(4) << weighted_rtt << " weighted measure : " << std::setprecision(4) << weighted_measure << IBRCOMMON_LOGGER_ENDL;
 
 			// calculate average
-			new_rtt = (new_rtt * AVG_RTT_WEIGHT) + ((1 - AVG_RTT_WEIGHT) * value);
+			double new_rtt = weighted_rtt + weighted_measure;
 
 			// assign the new value
 			_avg_rtt = new_rtt;
-
 			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 40) << "RTT adjusted, measured value: " << std::setprecision(4) << value << ", new avg. RTT: " << std::setprecision(4) << _avg_rtt << IBRCOMMON_LOGGER_ENDL;
 		}
 
