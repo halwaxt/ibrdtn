@@ -34,7 +34,8 @@
 
 #include <iomanip>
 
-#define AVG_RTT_WEIGHT 0.875
+// HAL: changed from 0.875
+#define AVG_RTT_WEIGHT 1.875
 
 namespace dtn
 {
