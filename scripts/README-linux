@@ -1,0 +1,3 @@
+set PKG_CONFIG_PATH or ibrdt will complain about missing ibrcommon
+
+PKG_CONFIG_PATH
