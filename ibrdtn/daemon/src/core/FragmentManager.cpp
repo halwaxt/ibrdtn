@@ -112,7 +112,10 @@ namespace dtn
 					}
 
 					// wait for the next bundle if the fragment is not complete
-					if (!BundleMerger::Chunk::isComplete(meta.appdatalength.get<dtn::data::Length>(), chunks)) continue;
+					if (!BundleMerger::Chunk::isComplete(meta.appdatalength.get<dtn::data::Length>(), chunks)) {
+						IBRCOMMON_LOGGER_DEBUG_TAG(FragmentManager::TAG, 20) << meta.toString() << " not yet completed " << IBRCOMMON_LOGGER_ENDL;
+						continue;
+					}
 
 					// create a new bundle merger container
 					dtn::data::BundleMerger::Container c = dtn::data::BundleMerger::getContainer();
@@ -150,6 +153,9 @@ namespace dtn
 						{
 							// inject bundle into core
 							dtn::core::BundleCore::getInstance().inject(dtn::core::BundleCore::local, merged, true);
+						}
+						else {
+							IBRCOMMON_LOGGER_TAG(FragmentManager::TAG, error) << "merged bundle did not pass filter" << IBRCOMMON_LOGGER_ENDL;
 						}
 
 						// delete all fragments of the merged bundle
