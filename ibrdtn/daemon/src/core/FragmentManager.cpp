@@ -152,7 +152,7 @@ namespace dtn
 						if (BundleCore::getInstance().filter(BundleFilter::INPUT, context, merged) == BundleFilter::ACCEPT)
 						{
 							// inject bundle into core
-							dtn::core::BundleCore::getInstance().inject(dtn::core::BundleCore::local, merged, true);
+							dtn::core::BundleCore::getInstance().inject(dtn::core::BundleCore::local, merged, false);
 						}
 						else {
 							IBRCOMMON_LOGGER_TAG(FragmentManager::TAG, error) << "merged bundle did not pass filter" << IBRCOMMON_LOGGER_ENDL;
