@@ -33,6 +33,7 @@
 #include <ibrcommon/Logger.h>
 #include <list>
 #include <limits>
+#include <string>
 
 #ifdef __DEVELOPMENT_ASSERTIONS__
 #include <cassert>
