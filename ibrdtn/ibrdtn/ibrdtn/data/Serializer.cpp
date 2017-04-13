@@ -171,6 +171,7 @@ namespace dtn
 
 		Serializer& DefaultSerializer::operator <<(const dtn::data::PrimaryBlock& obj)
 		{
+			IBRCOMMON_LOGGER_DEBUG_TAG("DefaultSerializer", 25) << "Serializing primary block with version " << std::to_string(dtn::data::BUNDLE_VERSION) << IBRCOMMON_LOGGER_ENDL;
 			_stream << dtn::data::BUNDLE_VERSION;		// bundle version
 			_stream << obj.procflags;	// processing flags
 
