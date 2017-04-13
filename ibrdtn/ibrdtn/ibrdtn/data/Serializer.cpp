@@ -663,7 +663,7 @@ namespace dtn
 
 			// check for the right version
 			_stream.get(version);
-			IBRCOMMON_LOGGER_DEBUG_TAG("DefaultDeserializer", 25) << "Bundle version received " << version  << " vs. static: " <<  dtn::data::BUNDLE_VERSION  << IBRCOMMON_LOGGER_ENDL;
+			IBRCOMMON_LOGGER_DEBUG_TAG("DefaultDeserializer", 25) << "Bundle version received " << std::to_string(version)  << " vs. static: " << std::to_string(dtn::data::BUNDLE_VERSION) << IBRCOMMON_LOGGER_ENDL;
 			if (version != dtn::data::BUNDLE_VERSION) throw dtn::InvalidProtocolException("Bundle version differ from ours.");
 
 			// PROCFLAGS
